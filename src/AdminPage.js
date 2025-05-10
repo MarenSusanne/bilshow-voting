@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const BACKEND_URL = "http://localhost:3001"; // bytt ved deploy
+const BACKEND_URL = "https://bilshow-backend.onrender.com"; // bytt ved deploy
 
 export default function AdminPage() {
   const [results, setResults] = useState([]);

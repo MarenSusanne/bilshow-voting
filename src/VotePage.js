@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
-const BACKEND_URL = "http://localhost:3001"; // bytt ved deploy
+const BACKEND_URL = "https://bilshow-backend.onrender.com"; // bytt ved deploy
 
 export default function VotePage() {
   const [contestants, setContestants] = useState([]);
