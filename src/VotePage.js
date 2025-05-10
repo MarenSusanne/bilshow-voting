@@ -16,8 +16,8 @@ export default function VotePage() {
     axios
       .get("https://fkfihkgywbucncojtzsf.supabase.co/rest/v1/contestants", {
         headers: {
-          apikey: "DIN_ANON_KEY",
-          Authorization: "Bearer DIN_ANON_KEY",
+          apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZmloa2d5d2J1Y25jb2p0enNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4OTgyNDEsImV4cCI6MjA2MjQ3NDI0MX0.lR2os0Gqbbo_eum7PhJHif2TjeW3A6CwzlDDLP1Brpg",
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZmloa2d5d2J1Y25jb2p0enNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4OTgyNDEsImV4cCI6MjA2MjQ3NDI0MX0.lR2os0Gqbbo_eum7PhJHif2TjeW3A6CwzlDDLP1Brpg",
         },
       })
       .then((res) => setContestants(res.data))
