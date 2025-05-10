@@ -30,21 +30,27 @@ export default function AdminPage() {
   }, [authorized, password]);
 
   if (!authorized) {
-    return (
-      <div>
-        <h2>Logg inn som admin</h2>
-        <a href="/">Tilbake til stemming</a>
+  const handleSubmit = (e) => {
+    e.preventDefault(); // hindrer siden fra å reloade
+    setAuthorized(true);
+  };
+
+  return (
+    <div>
+      <h2>Logg inn som admin</h2>
+      <form onSubmit={handleSubmit}>
         <input
           type="password"
           placeholder="Admin-passord"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={() => setAuthorized(true)}>Logg inn</button>
+        <button type="submit">Logg inn</button>
+      </form>
+    </div>
+  );
+}
 
-      </div>
-    );
-  }
 
   return (
     <div>
