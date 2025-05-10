@@ -3,6 +3,7 @@ import axios from "axios";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const BACKEND_URL = "https://bilshow-backend.onrender.com"; // bytt ved deploy
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZmloa2d5d2J1Y25jb2p0enNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4OTgyNDEsImV4cCI6MjA2MjQ3NDI0MX0.lR2os0Gqbbo_eum7PhJHif2TjeW3A6CwzlDDLP1Brpg";
 
 export default function VotePage() {
   const [contestants, setContestants] = useState([]);
@@ -16,8 +17,8 @@ export default function VotePage() {
     axios
       .get("https://fkfihkgywbucncojtzsf.supabase.co/rest/v1/contestants", {
         headers: {
-          apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZmloa2d5d2J1Y25jb2p0enNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4OTgyNDEsImV4cCI6MjA2MjQ3NDI0MX0.lR2os0Gqbbo_eum7PhJHif2TjeW3A6CwzlDDLP1Brpg",
-          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZmloa2d5d2J1Y25jb2p0enNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4OTgyNDEsImV4cCI6MjA2MjQ3NDI0MX0.lR2os0Gqbbo_eum7PhJHif2TjeW3A6CwzlDDLP1Brpg",
+          apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`
         },
       })
       .then((res) => setContestants(res.data))
