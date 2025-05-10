@@ -14,7 +14,7 @@ export default function VotePage() {
     }
 
     axios
-      .get("https://din-supabase-url.supabase.co/rest/v1/contestants", {
+      .get("https://fkfihkgywbucncojtzsf.supabase.co/rest/v1/contestants", {
         headers: {
           apikey: "DIN_ANON_KEY",
           Authorization: "Bearer DIN_ANON_KEY",
