@@ -1,0 +1,62 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+const BACKEND_URL = "http://localhost:3001"; // bytt ved deploy
+
+export default function AdminPage() {
+  const [results, setResults] = useState([]);
+  const [password, setPassword] = useState("");
+  const [authorized, setAuthorized] = useState(false);
+
+  useEffect(() => {
+    if (!authorized) return;
+
+    const fetchResults = async () => {
+      try {
+        const res = await axios.get(`${BACKEND_URL}/results`, {
+          headers: {
+            Authorization: `Bearer ${password}`,
+          },
+        });
+        setResults(res.data);
+      } catch (err) {
+        console.error("Feil ved henting av resultater", err);
+      }
+    };
+
+    fetchResults();
+    const interval = setInterval(fetchResults, 5000);
+    return () => clearInterval(interval);
+  }, [authorized, password]);
+
+  if (!authorized) {
+    return (
+      <div>
+        <h2>Logg inn som admin</h2>
+        <a href="/">Tilbake til stemming</a>
+        <input
+          type="password"
+          placeholder="Admin-passord"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={() => setAuthorized(true)}>Logg inn</button>
+
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1>Live Resultater</h1>
+      <a href="/">Tilbake til stemming</a>
+      <ul>
+        {results.map((r, index) => (
+          <li key={index}>
+            <strong>{r.name}:</strong> {r.votes} stemmer
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
