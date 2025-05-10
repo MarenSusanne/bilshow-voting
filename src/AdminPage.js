@@ -31,7 +31,7 @@ export default function AdminPage() {
 
   if (!authorized) {
   const handleSubmit = (e) => {
-    e.preventDefault(); // hindrer siden fra å reloade
+    e.preventDefault();
     setAuthorized(true);
   };
 
@@ -44,6 +44,7 @@ export default function AdminPage() {
           placeholder="Admin-passord"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          style={{ marginRight: "0.5rem" }}
         />
         <button type="submit">Logg inn</button>
       </form>
