@@ -38,6 +38,7 @@ export default function AdminPage() {
   return (
     <div>
       <h2>Logg inn som admin</h2>
+            <a href="/">Tilbake til stemming</a>
       <form onSubmit={handleSubmit}>
         <input
           type="password"
