@@ -48,3 +48,38 @@
   color: green;
   font-weight: bold;
 }
+
+@media (min-width: 768px) {
+   .vote-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .vote-logo {
+  width: 300px;
+}
+
+  .vote-title {
+    font-size: 2rem;
+  }
+
+  .vote-form {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  .vote-input {
+    flex: 1;
+  }
+
+  .vote-button {
+    white-space: nowrap;
+  }
+}
