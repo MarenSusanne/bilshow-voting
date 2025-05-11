@@ -62,6 +62,13 @@ export default function VotePage() {
         <button type="submit" className="vote-button">Stem</button>
       </form>
     )}
+    <a
+  href="/admin"
+  className="admin-link"
+  style={{ marginTop: "2rem", fontSize: "0.9rem", color: "#666", textDecoration: "underline" }}
+>
+  Admin
+</a>
 
     {/* Test-knapp – kun synlig i utvikling */}
     {process.env.NODE_ENV === "development" && (
