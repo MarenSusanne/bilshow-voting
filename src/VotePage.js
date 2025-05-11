@@ -1,31 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
-const BACKEND_URL = "https://bilshow-backend.onrender.com"; // bytt ved deploy
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZmloa2d5d2J1Y25jb2p0enNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4OTgyNDEsImV4cCI6MjA2MjQ3NDI0MX0.lR2os0Gqbbo_eum7PhJHif2TjeW3A6CwzlDDLP1Brpg";
+const BACKEND_URL = "https://din-backend-url.onrender.com";
 
 export default function VotePage() {
-  const [contestants, setContestants] = useState([]);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [input, setInput] = useState("");
+  const [hasVoted, setHasVoted] = useState(localStorage.getItem("hasVoted"));
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    if (localStorage.getItem("hasVoted")) {
-      setHasVoted(true);
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    axios
-      .get("https://fkfihkgywbucncojtzsf.supabase.co/rest/v1/contestants", {
-        headers: {
-          apikey: supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`
-        },
-      })
-      .then((res) => setContestants(res.data))
-      .catch((err) => console.error("Feil ved henting av biler", err));
-  }, []);
-
-  const sendVote = async (contestantId) => {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
     const fingerprint = result.visitorId;
@@ -35,39 +21,36 @@ export default function VotePage() {
 
     try {
       await axios.post(`${BACKEND_URL}/vote`, {
-        contestantId,
+        carName: input,
         fingerprint,
         ipAddress,
       });
 
       localStorage.setItem("hasVoted", "true");
       setHasVoted(true);
+      setMessage("Takk for din stemme!");
     } catch (err) {
-      alert("Du har allerede stemt eller noe gikk galt.");
+      setMessage("Noe gikk galt: " + (err.response?.data?.error || "Ukjent feil"));
     }
   };
 
   return (
     <div>
       <h1>Stem på din favorittbil</h1>
-        <a href="/admin">Gå til admin</a>
-
-      {hasVoted && (
-        <div style={{ background: "#def", padding: "1rem", marginBottom: "1rem" }}>
-          <strong>Takk for at du stemte!</strong>
-        </div>
+      {hasVoted ? (
+        <p>{message || "Du har allerede stemt."}</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Skriv inn bilnavn (f.eks. Ford Mustang)"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            required
+          />
+          <button type="submit">Stem</button>
+        </form>
       )}
-
-      {contestants.map((c) => (
-        <div key={c.id} style={{ marginBottom: "2rem" }}>
-          <h2>{c.name}</h2>
-          {c.photo_url && <img src={c.photo_url} alt={c.name} width="200" />}
-          <br />
-          {!hasVoted && (
-            <button onClick={() => sendVote(c.id)}>Stem</button>
-          )}
-        </div>
-      ))}
     </div>
   );
 }
