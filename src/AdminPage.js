@@ -20,6 +20,7 @@ export default function AdminPage() {
             Authorization: `Bearer ${password}`,
           },
         });
+        console.log("✅ Resultatdata:", res.data);
         setResults(res.data);
       } catch (err) {
         console.error("Feil ved henting av resultater", err);
@@ -45,7 +46,7 @@ export default function AdminPage() {
         }
       );
       alert("✅ Stemmer nullstilt! Versjon: " + res.data.newVersion);
-      setResults([]); // nullstill visningen
+      setResults([]);
     } catch (err) {
       console.error("Kunne ikke nullstille stemmer:", err);
       alert("❌ Feil: " + (err.response?.data?.error || "Ukjent feil"));
@@ -79,22 +80,27 @@ export default function AdminPage() {
   return (
     <div className="admin-container">
       <h2 className="admin-title">Resultater</h2>
-      <table className="results-table">
-        <thead>
-          <tr>
-            <th>Bil</th>
-            <th>Stemmer</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((row) => (
-            <tr key={row.name}>
-              <td>{row.name}</td>
-              <td>{row.vote_count}</td>
+
+      {results.length === 0 ? (
+        <p>Ingen stemmer registrert enda.</p>
+      ) : (
+        <table className="results-table">
+          <thead>
+            <tr>
+              <th>Bil</th>
+              <th>Stemmer</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {results.map((row) => (
+              <tr key={row.name}>
+                <td>{row.name}</td>
+                <td>{row.votes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
       <button
         className="admin-button"
