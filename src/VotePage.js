@@ -46,7 +46,8 @@ export default function VotePage() {
 
     const ipRes = await axios.get("https://api64.ipify.org?format=json");
     const ipAddress = ipRes.data.ip;
-
+    console.log("Stemmer med:", { carName, fingerprint, ipAddress });
+    
     try {
       await axios.post(`${BACKEND_URL}/vote`, {
         carName,

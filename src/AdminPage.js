@@ -53,11 +53,72 @@ export default function AdminPage() {
     }
   };
 
+  const simulateVotes = async (count = 100) => {
+  const carNames = [
+    "BMW M3", "Audi A4", "Ford Mustang", "Tesla Model 3", "Volvo XC60", "Porsche 911",
+    "Volkswagen Golf", "Toyota Supra", "Chevrolet Camaro", "Nissan 350Z",
+    "Mazda MX-5", "Lamborghini Aventador", "Ferrari F8", "Kia EV6", "Hyundai Ioniq 5",
+    "Peugeot 208", "Renault Clio", "Skoda Octavia", "Mercedes C200", "Opel Astra",
+    "Honda Civic", "Subaru Impreza", "Alfa Romeo Giulia", "Dodge Challenger", "Jeep Wrangler",
+    "Range Rover Evoque", "Mini Cooper", "Citroën C3", "Suzuki Swift", "Mitsubishi Lancer",
+    "Bugatti Chiron", "Koenigsegg Jesko", "BMW i8", "Tesla Model S", "Tesla Cybertruck",
+    "Ford F-150", "Ram 1500", "Toyota Hilux", "Audi RS6", "Mercedes G-Wagon",
+    "Lexus RX", "Volvo V90", "Polestar 2", "Fiat 500", "Mazda CX-5", "Toyota Corolla",
+    "Honda Accord", "Seat Leon", "Cupra Born", "DS 4"
+  ];
+
+  const variations = (name) => [
+    name,
+    name.toLowerCase(),
+    name.toUpperCase(),
+    ` ${name} `,
+    name.replace(" ", "").toLowerCase(),
+    name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+  ];
+
+  for (let i = 0; i < count; i++) {
+    const baseName = carNames[Math.floor(Math.random() * carNames.length)];
+    const variantList = variations(baseName);
+    const carName = variantList[Math.floor(Math.random() * variantList.length)];
+
+    const fakeFingerprint = `sim-${Math.random().toString(36).slice(2, 10)}`;
+    const fakeIP = `10.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+
+    try {
+      await axios.post(`${BACKEND_URL}/vote`, {
+        carName,
+        fingerprint: fakeFingerprint,
+        ipAddress: fakeIP
+      });
+
+      console.log(`✅ Simulert stemme ${i + 1}:`, carName);
+    } catch (err) {
+      console.error(`❌ Feil på stemme ${i + 1}:`, err.response?.data?.error || err.message);
+    }
+  }
+
+  alert(`🎉 Ferdig! Simulerte ${count} stemmer.`);
+};
+
+
+
   if (!authorized) {
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      setAuthorized(true);
-    };
+    const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await axios.get(`${BACKEND_URL}/results`, {
+      headers: {
+        Authorization: `Bearer ${password}`,
+      },
+    });
+    setAuthorized(true);
+    setError("");
+  } catch (err) {
+    console.error("Feil passord:", err);
+    setError("Ugyldig passord");
+  }
+};
+
 
     return (
       <div className="admin-container">
@@ -101,7 +162,32 @@ export default function AdminPage() {
           </tbody>
         </table>
       )}
-
+      <button
+        className="admin-button"
+        style={{ marginTop: "1rem", backgroundColor: "#0077aa" }}
+        onClick={() => simulateVotes(120)}
+      >
+        🧪 Simuler 20 stemmer
+      </button>
+      <button
+        className="admin-button"
+        style={{ marginTop: "1rem", backgroundColor: "#444" }}
+        onClick={async () => {
+          if (!window.confirm("Slå sammen like bilnavn og rydde databasen?")) return;
+          try {
+            const res = await axios.post(`${BACKEND_URL}/merge-contestants`, {}, {
+              headers: {
+                Authorization: `Bearer ${password}`
+              }
+            });
+            alert("✅ " + res.data.message);
+          } catch (err) {
+            alert("❌ Klarte ikke slå sammen: " + (err.response?.data?.error || err.message));
+          }
+        }}
+      >
+        🧹 Slå sammen duplikater
+      </button>
       <button
         className="admin-button"
         style={{ marginTop: "2rem", backgroundColor: "#c00" }}
