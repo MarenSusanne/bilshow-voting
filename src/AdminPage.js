@@ -162,6 +162,13 @@ export default function AdminPage() {
           </tbody>
         </table>
       )}
+      <a
+        href="/"
+        className="admin-link"
+        style={{ marginTop: "2rem", fontSize: "0.9rem", color: "#666", textDecoration: "underline", display: "inline-block" }}
+      >
+        ← Tilbake til stemmesiden
+      </a>
       <button
         className="admin-button"
         style={{ marginTop: "1rem", backgroundColor: "#0077aa" }}
